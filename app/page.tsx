@@ -15,14 +15,14 @@ export default () => {
     <>
       <main>
         {token === null ? (<button onClick={async () => {
-          const {accessToken, url} = await fetch('/api/token').then(res => res.json());
+          const { accessToken = undefined, url = undefined } = await fetch('/api/token').then(res => res.json());
           setToken(accessToken);
           setUrl(url);
         }}>Connect</button>) : (
           <LiveKitRoom
             token={token}
-            serverUrl={url}
-            connectOptions={{autoSubscribe: true}}
+            serverUrl={url == null ? undefined : (url as string)}
+            connectOptions={{ autoSubscribe: true }}
           >
             <ActiveRoom />
           </LiveKitRoom>
@@ -40,7 +40,7 @@ const ActiveRoom = () => {
       <button onClick={() => {
         localParticipant?.setMicrophoneEnabled(!isMicrophoneEnabled)
       }}>Toggle Microphone</button>
-      <div>Audio Enabled: { isMicrophoneEnabled ? 'Unmuted' : 'Muted' }</div>
+      <div>Audio Enabled: {isMicrophoneEnabled ? 'Unmuted' : 'Muted'}</div>
     </>
   );
 };
